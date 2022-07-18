@@ -1,0 +1,32 @@
+name: 'Build backend and run tests'
+
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - backend
+
+pool:
+  name: Ubuntu
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'Restore dependencies'
+  inputs:
+    command: 'restore'
+    projects: 'backend/FlyTonight/FlyTonight.API/FlyTonight.API.csproj'
+    feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build FlyTonight.API'
+  inputs:
+    command: 'build'
+    projects: 'backend/FlyTonight/FlyTonight.API/FlyTonight.API.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run tests'
+  inputs:
+    command: 'test'
+    projects: 'backend/FlyTonight/FlyTonight.sln'
